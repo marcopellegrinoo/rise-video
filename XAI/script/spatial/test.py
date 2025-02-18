@@ -61,7 +61,7 @@ class doprout_custom(tf.keras.layers.SpatialDropout1D):
             return super().call(inputs, training=False)
 
 # Percorso della directory su Cineca
-base_dir = os.path.join(os.environ['WORK'], "Water_Resources/rise-video/trained_models/seq2val/Vottingasco")
+base_dir = os.path.join(os.environ['WORK'], "Water_Resources/rise-video/trained_models/seq2val/Vottignasco")
 lstm_suffix = 'time_dist_LSTM'
 
 vott_lstm_models = []
