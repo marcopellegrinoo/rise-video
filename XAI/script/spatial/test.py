@@ -30,7 +30,6 @@ v_test_OHE_path = os.path.join(work_path, "Water_Resources/rise-video/data/Votti
 v_test_image_path = os.path.join(work_path, "Water_Resources/rise-video/data/Vottignasco/Vottignasco_00425010001_test_normalized_image_sequences.npy")
 v_test_target_dates_path = os.path.join(work_path, "Water_Resources/rise-video/data/Vottignasco/Vottignasco_00425010001_test_target_dates.npy")
 
-
 # Carica l'array numpy dai file
 vottingasco_test_OHE    = np.load(v_test_OHE_path)
 vottignasco_test_image  = np.load(v_test_image_path)
@@ -41,54 +40,54 @@ print(len(vottignasco_test_dates))
 print(len(vottignasco_test_image))
 print(len(vottingasco_test_OHE))
 
-print(vottingasco_test_OHE[0], "\n")
-print(vottignasco_test_image[0][0], "\n")
+#print(vottingasco_test_OHE[0], "\n")
+#print(vottignasco_test_image[0][0], "\n")
 
 # """##### ***Black Boxes***"""
 
-# import os
-# import tensorflow as tf
-# from keras.models import load_model
+import os
+import tensorflow as tf
+from keras.models import load_model
 
-# # Se vuoi abilitare il dropout a runtime
-# mc_dropout = True
+# Se vuoi abilitare il dropout a runtime
+mc_dropout = True
 
-# # Definizione della classe personalizzata doprout_custom
-# class doprout_custom(tf.keras.layers.SpatialDropout1D):
-#     def call(self, inputs, training=None):
-#         if mc_dropout:
-#             return super().call(inputs, training=True)
-#         else:
-#             return super().call(inputs, training=False)
+# Definizione della classe personalizzata doprout_custom
+class doprout_custom(tf.keras.layers.SpatialDropout1D):
+    def call(self, inputs, training=None):
+        if mc_dropout:
+            return super().call(inputs, training=True)
+        else:
+            return super().call(inputs, training=False)
 
-# # Percorso della directory su Cineca
-# base_dir = os.path.join(os.environ['WORK'], "Water_Resources/rise-video/trained_models/seq2val/Vottingasco")
-# lstm_suffix = 'time_dist_LSTM'
+# Percorso della directory su Cineca
+base_dir = os.path.join(os.environ['WORK'], "Water_Resources/rise-video/trained_models/seq2val/Vottingasco")
+lstm_suffix = 'time_dist_LSTM'
 
-# vott_lstm_models = []
+vott_lstm_models = []
 
-# def extract_index(filename):
-#     """Funzione per estrarre l'indice finale dal nome del file."""
-#     return int(filename.split('_LSTM_')[-1].split('.')[0])
+def extract_index(filename):
+    """Funzione per estrarre l'indice finale dal nome del file."""
+    return int(filename.split('_LSTM_')[-1].split('.')[0])
 
-# # Trova tutti i file .keras nella cartella e li aggiunge alla lista
-# for filename in os.listdir(base_dir):
-#     if lstm_suffix in filename and filename.endswith(".keras"):
-#         vott_lstm_models.append(os.path.join(base_dir, filename))
+# Trova tutti i file .keras nella cartella e li aggiunge alla lista
+for filename in os.listdir(base_dir):
+    if lstm_suffix in filename and filename.endswith(".keras"):
+        vott_lstm_models.append(os.path.join(base_dir, filename))
 
-# # Ordina i modelli in base all'indice finale
-# vott_lstm_models = sorted(vott_lstm_models, key=lambda x: extract_index(os.path.basename(x)))
+# Ordina i modelli in base all'indice finale
+vott_lstm_models = sorted(vott_lstm_models, key=lambda x: extract_index(os.path.basename(x)))
 
-# # Lista per i modelli caricati
-# vott_lstm_models_loaded = []
+# Lista per i modelli caricati
+vott_lstm_models_loaded = []
 
-# for i, model_lstm_path in enumerate(vott_lstm_models[:10]):  # Prendo i primi 10 modelli ordinati
-#     print(f"Caricamento del modello LSTM {i+1}: {model_lstm_path}")
+for i, model_lstm_path in enumerate(vott_lstm_models[:10]):  # Prendo i primi 10 modelli ordinati
+    print(f"Caricamento del modello LSTM {i+1}: {model_lstm_path}")
 
-#     # Carico il modello con la classe custom
-#     model = load_model(model_lstm_path, custom_objects={"doprout_custom": doprout_custom})
+    # Carico il modello con la classe custom
+    model = load_model(model_lstm_path, custom_objects={"doprout_custom": doprout_custom})
 
-#     # Aggiungo il modello alla lista
-#     vott_lstm_models_loaded.append(model)
+    # Aggiungo il modello alla lista
+    vott_lstm_models_loaded.append(model)
 
-# print(vott_lstm_models_loaded)
+print(vott_lstm_models_loaded)
