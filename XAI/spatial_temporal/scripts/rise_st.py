@@ -267,7 +267,7 @@ channel_prec = 0
 # Parametri
 H, W, D = 104, 5, 8  # Dimensione dei frame (104 frame 5x8)
 h, w, d = 8, 2, 4    # Dimensione maschera più piccola
-N = 15000               # Numero di maschere
+N = 20000               # Numero di maschere
 p = 0.2              # Probabilità di un pixel attivo
 
 saliency_video_vott_test = []
@@ -279,8 +279,6 @@ for nr_instance, _ in enumerate(vottignasco_test_image):
                                                    p, H, W, D, h, w, d, N)
 
   saliency_video_vott_test.append(saliency_video_i)
-
-  break
 
   print("######################################################################################## \n")
 
