@@ -14,8 +14,6 @@
 export PYTHONUNBUFFERED=TRUE
 
 module purge
-module load cuda/12.2
-module load cudnn/8.9
 
 export WANDB_MODE = "offline"
 
