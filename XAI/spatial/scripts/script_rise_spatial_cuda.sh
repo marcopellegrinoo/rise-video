@@ -12,9 +12,9 @@
 #SBATCH --qos=normal                    # quality of service (optional)
 
 export PYTHONUNBUFFERED=TRUE
-module purge 
-module load cuda
-module load cudnn
+module purge
+module load profile/base
+module load cuda/11.8 cudnn/8.6
 
 source $WORK/Water_Resources/env/bin/activate
 cd $WORK/Water_Resources/rise-video/XAI/spatial/scripts
