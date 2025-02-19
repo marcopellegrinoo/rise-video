@@ -16,11 +16,6 @@ module purge
 module load cuda/12.2
 module load cudnn/8.9
 
-export CUDA_HOME=/leonardo/prod/opt/compilers/cuda/12.1/none
-export LIBDEVICE_PATH=/leonardo/prod/opt/compilers/cuda/12.1/none/nvvm/libdevice
-export XLA_FLAGS="--xla_gpu_cuda_data_dir=${LIBDEVICE_PATH}"
-export LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH
-
 source $WORK/Water_Resources/env/bin/activate
 cd $WORK/Water_Resources/rise-video/XAI/spatial/scripts
 
