@@ -13,7 +13,7 @@
 
 export PYTHONUNBUFFERED=TRUE
 module purge
-module load cuda/12.1
+module load cuda/12.2
 module load cudnn/8.9
 
 export CUDA_HOME=/leonardo/prod/opt/compilers/cuda/12.1/none
