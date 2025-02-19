@@ -17,8 +17,7 @@ module purge
 module load cuda/12.2
 module load cudnn/8.9
 
-export XLA_FLAGS=--xla_gpu_cuda_data_dir=$CUDA_HOME/nvvm
-export LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH
+export WANDB_MODE = "offline"
 
 source $WORK/Water_Resources/env/bin/activate
 cd $WORK/Water_Resources/rise-video/XAI/spatial/scripts
