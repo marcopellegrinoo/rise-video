@@ -12,6 +12,12 @@
 #SBATCH --qos=normal                    # quality of service (optional)
 
 export PYTHONUNBUFFERED=TRUE
+module purge
+module load cuda/12.1
+module load cudnn/8.9
+
+# Set XLA_FLAGS for CUDA libdevice
+export XLA_FLAGS="--xla_gpu_cuda_data_dir=/leonardo/prod/opt/compilers/cuda/12.1/none/nvvm"
 
 source $WORK/Water_Resources/env/bin/activate
 cd $WORK/Water_Resources/rise-video/XAI/spatial/scripts
