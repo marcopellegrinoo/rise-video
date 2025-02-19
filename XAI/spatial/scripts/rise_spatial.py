@@ -93,6 +93,13 @@ for i, model_lstm_path in enumerate(vott_lstm_models[:10]):  # Prendo i primi 10
 
 print(vott_lstm_models_loaded)
 
+# Verifica la presenza della GPU
+gpus = tf.config.list_physical_devices('GPU')
+if gpus:
+    print(f"GPU disponibile: {gpus}")
+else:
+    print("Nessuna GPU trovata. Utilizzo della CPU.")
+
 """### ***Spatial-RISE***
 
 #### ***Generation Masks (2D): Uniforme***
