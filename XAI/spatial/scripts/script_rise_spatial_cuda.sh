@@ -13,8 +13,8 @@
 
 export PYTHONUNBUFFERED=TRUE
 module purge
-module load cuda
-module load cudnn
+module load cuda/12.1
+module load cudnn/8.9
 
 source $WORK/Water_Resources/env/bin/activate
 cd $WORK/Water_Resources/rise-video/XAI/spatial/scripts
