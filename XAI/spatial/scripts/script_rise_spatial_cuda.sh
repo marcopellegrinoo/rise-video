@@ -13,7 +13,6 @@
 
 export PYTHONUNBUFFERED=TRUE
 module purge
-module load profile/base
 module load cuda
 module load cudnn
 
