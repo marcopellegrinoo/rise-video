@@ -182,39 +182,6 @@ def generate_masks_gaussian_single_center(N, input_size, seed, **kwargs):
 
   return masks
 
-# UNIFORM NOISE
-from skimage.transform import resize
-from tqdm import tqdm
-
-def generate_masks_uniform(N, input_size, seed, **kwargs):
-    """
-    Genera maschere con griglia.
-
-    kwargs:
-    - s: numero di celle nella griglia (dimensione s × s)
-    - p1: probabilità di attivazione della cella
-    - seed: per la riproducibilità
-    """
-    s = kwargs.get("s", 3)
-    p1 = kwargs.get("p1", 0.5)
-    seed = kwargs.get("seed", 42)
-
-    cell_size = np.ceil(np.array(input_size) / s)
-    up_size = (s + 1) * cell_size
-
-    np.random.seed(seed)
-    grid = np.random.rand(N, s, s) < p1
-    grid = grid.astype('float32')
-
-    masks = np.empty((N, *input_size))
-
-    for i in tqdm(range(N), desc='Generating masks (Grid)'):
-        x = np.random.randint(0, cell_size[0])
-        y = np.random.randint(0, cell_size[1])
-        masks[i, :, :] = resize(grid[i], up_size, order=1, mode='reflect', anti_aliasing=False)[x:x + input_size[0], y:y + input_size[1]]
-
-    return masks
-
 """#### ***Masks Application***"""
 
 import copy
