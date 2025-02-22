@@ -549,73 +549,66 @@ Fisso N=1000 per vedere le prestazioni migliori su Vottignasco Test-Set tramite 
 Poi faccio prova di convergenza su N
 """
 
-### Setup 1: N=1000, s=1.5, p=[0.1,...,0.9]
-
 import copy
 
-nr_setup = 1
 channel_prec = 0
-
 models = vott_lstm_models_loaded
-
-N = 10
 seed = 42
-
-s = 1.5
-
 T,H,W,C = (104,5,8,3)
 
-#p_values = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
-p_values = [0.1, 0.2]
+N = 1000
 
-# per ogni coppia (s,p) conservo le stats medie su Insertion/Deletion per poterle confrontare
-stats_mean_insertion = []
-stats_mean_deletion  = []
+s_values = [1.5, 2, 2.5, 3, 4, 5, 8]
+p_values = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
 
-for p in p_values:
-  all_saliency_maps   = []
-  all_insertion_stats = []
-  all_deletion_stats  = []
-  print(f"####################### Setup #1: s={s}, p={p} with N=1000 #######################")
+for nr_setup,s in enumerate(s_values):
+  # per ogni coppia (s,p) conservo le stats medie su Insertion/Deletion per poterle confrontare
+  stats_mean_insertion = []
+  stats_mean_deletion  = []
 
-  for nr_instance,_ in enumerate(vottignasco_test_image):
-    # Eseguire con diverse funzioni
-    print(f"######### Instance #{nr_instance}, generation of Saliency Map for Prec, stats for Insertion/Deletion #########")
-    saliency_map = rise_spatial_explain(nr_instance, vottignasco_test_image, vottignasco_test_OHE, models, channel_prec,
+  for p in p_values:
+    all_saliency_maps   = []
+    all_insertion_stats = []
+    all_deletion_stats  = []
+
+    print(f"####################### Setup #{nr_setup+1}: s={s}, p={p} with N=1000 #######################")
+    for nr_instance,_ in enumerate(vottignasco_test_image):
+       # Eseguire con diverse funzioni
+       print(f"######### Instance #{nr_instance}, generation of Saliency Map for Prec, stats for Insertion/Deletion #########")
+       saliency_map = rise_spatial_explain(nr_instance, vottignasco_test_image, vottignasco_test_OHE, models, channel_prec,
                                         N, generate_masks_uniform, seed, additive_noise_onechannel, s=s, p1=p)
+          
+       # Insertion 
+       initial_blurred_instance = np.zeros((T, H, W, C))
+       all_important_pixels = get_top_n_pixels(saliency_map[0], H*W)
+       original_instance = copy.deepcopy(vottignasco_test_image[nr_instance])
+       x3_instance = copy.deepcopy(vottignasco_test_OHE[nr_instance])
 
-    # Insertion
-    initial_blurred_instance = np.zeros((T, H, W, C))
-    all_important_pixels = get_top_n_pixels(saliency_map[0], H*W)
-    original_instance = copy.deepcopy(vottignasco_test_image[nr_instance])
-    x3_instance = copy.deepcopy(vottignasco_test_OHE[nr_instance])
+       original_prediction = ensemble_predict(models, original_instance, x3_instance)
+       errors_insertion,auc_insertion = insertion(models, original_instance, x3_instance, all_important_pixels, initial_blurred_instance, original_prediction)
+       # Deletion
+       errors_deletion,auc_deletion   = deletion(models, original_instance, x3_instance, all_important_pixels, original_prediction)
 
-    original_prediction = ensemble_predict(models, original_instance, x3_instance)
-    errors_insertion,auc_insertion = insertion(models, original_instance, x3_instance, all_important_pixels, initial_blurred_instance, original_prediction)
-    # Deletion
-    errors_deletion,auc_deletion   = deletion(models, original_instance, x3_instance, all_important_pixels, original_prediction)
+       all_saliency_maps.append(saliency_map)
+       # Aggiungi la coppia [errors_insertion, auc_insertion] alla lista
+       all_insertion_stats.append([errors_insertion, auc_insertion])
+       # Coppia per la Deletion
+       all_deletion_stats.append([errors_deletion, auc_deletion])
+       print(f"###################### End Instance #{nr_instance} ######################")
 
-    all_saliency_maps.append(saliency_map)
-    # Aggiungi la coppia [errors_insertion, auc_insertion] alla lista
-    all_insertion_stats.append([errors_insertion, auc_insertion])
-    # Coppia per la Deletion
-    all_deletion_stats.append([errors_deletion, auc_deletion])
-    print(f"###################### End Instance #{nr_instance} ######################")
+    only_errors_insertion = [errors for errors,_ in all_insertion_stats]
+    auc_insertion,mean_errors_insertion = plot_insertion_error_mean_curve(only_errors_insertion)
+    stats_mean_insertion.append([auc_insertion,mean_errors_insertion])
 
-  only_errors_insertion = [errors for errors,_ in all_insertion_stats]
-  auc_insertion,mean_errors_insertion = plot_insertion_error_mean_curve(only_errors_insertion)
-  stats_mean_insertion.append([auc_insertion,mean_errors_insertion])
+    only_errors_deletion =  [errors for errors,_ in all_deletion_stats]
+    auc_deletion,mean_errors_deletion = plot_deletion_error_mean_curve(only_errors_deletion)
+    stats_mean_deletion.append([auc_deletion,mean_errors_deletion])
 
-  only_errors_deletion =  [errors for errors,_ in all_deletion_stats]
-  auc_deletion,mean_errors_deletion = plot_deletion_error_mean_curve(only_errors_deletion)
-  stats_mean_deletion.append([auc_deletion,mean_errors_deletion])
+    print(f"############################ ALL Dataset #############################################")
 
-  print(f"###################################################################################")
+  df_stats_mean_insertion = pd.DataFrame(stats_mean_insertion, columns=['AUC', 'Mean Insertion Errors for each Pixel'])
+  df_stats_mean_deletion  = pd.DataFrame(stats_mean_deletion,  columns=['AUC', 'Mean Deletion Errors for each Pixel'])
 
-import pandas as pd
+  df_stats_mean_insertion.to_csv(os.path.join(work_path, f"Water_Resources/rise-video/XAI/spatial/results/additive_uniform_noise/setup_{nr_setup+1}/setup_{nr_setup+1}_all_stats_mean_insertion.csv"), index=False)
+  df_stats_mean_deletion.to_csv(os.path.join(work_path, f"Water_Resources/rise-video/XAI/spatial/results/additive_uniform_noise/setup_{nr_setup+1}/setup_{nr_setup+1}_all_stats_mean_deletion.csv"),   index=False)
 
-df_stats_mean_insertion = pd.DataFrame(stats_mean_insertion, columns=['AUC', 'Mean Insertion Errors for each Pixel'])
-df_stats_mean_deletion  = pd.DataFrame(stats_mean_deletion,  columns=['AUC', 'Mean Deletion Errors for each Pixel'])
-
-df_stats_mean_insertion.to_csv(os.path.join(work_path, f"Water_Resources/rise-video/XAI/spatial/results/additive_uniform_noise/setup_1/setup_{nr_setup}_all_stats_mean_insertion.csv"), index=False)
-df_stats_mean_deletion.to_csv(os.path.join(work_path, f"Water_Resources/rise-video/XAI/spatial/results/additive_uniform_noise/setup_1/setup_{nr_setup}_all_stats_mean_deletion.csv"),   index=False)
