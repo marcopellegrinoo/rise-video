@@ -606,6 +606,7 @@ for nr_setup,s in enumerate(s_values):
 
     print(f"############################ ALL Dataset #############################################")
 
+  import pandas as pd  
   df_stats_mean_insertion = pd.DataFrame(stats_mean_insertion, columns=['AUC', 'Mean Insertion Errors for each Pixel'])
   df_stats_mean_deletion  = pd.DataFrame(stats_mean_deletion,  columns=['AUC', 'Mean Deletion Errors for each Pixel'])
 
