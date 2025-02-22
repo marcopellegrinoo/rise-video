@@ -546,7 +546,7 @@ for nr_setup,sigma_x in enumerate(sigma_x_values):
        # Eseguire con diverse funzioni
        print(f"######### Instance #{nr_instance}, generation of Saliency Map for Prec, stats for Insertion/Deletion #########")
        saliency_map = rise_spatial_explain(nr_instance, vottignasco_test_image, vottignasco_test_OHE, models, channel_prec,
-                                        N, generate_masks_uniform, seed, additive_noise_onechannel, sigma_x=sigma_x, sigma_y=sigma_y)
+                                        N, generate_masks_gaussian_single_center, seed, additive_noise_onechannel, sigma_x=sigma_x, sigma_y=sigma_y)
 
        # Insertion
        initial_blurred_instance = np.zeros((T, H, W, C))
