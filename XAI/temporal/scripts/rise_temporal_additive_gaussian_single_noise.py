@@ -532,5 +532,5 @@ import pandas as pd
 df_stats_mean_insertion = pd.DataFrame(stats_mean_insertion, columns=['AUC', 'Mean Insertion Errors for each Frame'])
 df_stats_mean_deletion  = pd.DataFrame(stats_mean_deletion,  columns=['AUC', 'Mean Deletion Errors for each Frame'])
 
-df_stats_mean_insertion.to_csv(os.path.join(work_path, f"Water_Resources/rise-video/XAI/tempora/results/additive_gaussian_single_noise/all_stats_mean_insertion.csv"), index=False)
-df_stats_mean_deletion.to_csv(os.path.join(work_path, f"Water_Resources/rise-video/XAI/tempora/results/additive_gaussian_single_noise/all_stats_mean_deletion.csv"),   index=False)
+df_stats_mean_insertion.to_csv(os.path.join(work_path, f"Water_Resources/rise-video/XAI/temporal/results/additive_gaussian_single_noise/all_stats_mean_insertion.csv"), index=False)
+df_stats_mean_deletion.to_csv(os.path.join(work_path, f"Water_Resources/rise-video/XAI/temporal/results/additive_gaussian_single_noise/all_stats_mean_deletion.csv"),   index=False)
