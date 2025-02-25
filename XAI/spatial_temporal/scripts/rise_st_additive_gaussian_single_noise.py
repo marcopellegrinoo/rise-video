@@ -800,7 +800,8 @@ import pandas as pd
 df_stats_mean_insertion = pd.DataFrame(stats_mean_insertion, columns=['AUC', 'Mean Insertion Errors for each Pixel'])
 df_stats_mean_deletion  = pd.DataFrame(stats_mean_deletion,  columns=['AUC', 'Mean Deletion Errors for each Pixel'])
 
-# Salva l'array in un file
-np.save(os.path.join(work_path, f"Water_Resources/rise-video/XAI/spatial_temporal/results/additive_gaussian_single_noise/saliency_videos.npy", saliency_videos)
 df_stats_mean_insertion.to_csv(os.path.join(work_path, f"Water_Resources/rise-video/XAI/spatial_temporal/results/additive_gaussian_single_noise/all_stats_mean_insertion.csv"), index=False)
 df_stats_mean_deletion.to_csv(os.path.join(work_path, f"Water_Resources/rise-video/XAI/spatial_temporal/results/additive_gaussian_single_noise/all_stats_mean_deletion.csv"),   index=False)
+
+# Salva l'array in un file
+np.save(os.path.join(work_path, f"Water_Resources/rise-video/XAI/spatial_temporal/results/additive_gaussian_single_noise/saliency_videos.npy"), saliency_videos)
