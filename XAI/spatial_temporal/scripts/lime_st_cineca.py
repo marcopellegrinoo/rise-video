@@ -211,8 +211,8 @@ print(vott_lstm_models_loaded)
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-import imageio
-from IPython.display import Image
+#import imageio
+#from IPython.display import Image
 
 def get_season(day):
   spring = np.arange(80, 172)
