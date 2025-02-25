@@ -747,6 +747,7 @@ sigma_y_values = [3.0]
 
 stats_mean_insertion = []
 stats_mean_deletion  = []
+saliency_videos      = []
 
 for sigma_t in sigma_t_values:
   for sigma_x in sigma_x_values:
@@ -755,6 +756,7 @@ for sigma_t in sigma_t_values:
       print(f"####################### Experiment: {param_combination} #######################")
       all_insertion_stats = []
       all_deletion_stats  = []
+      all_saliency_video  = []
 
       for nr_instance,_ in enumerate(vottignasco_test_image):
         print(f"######### Instance #{nr_instance} with {param_combination}, generation of Saliency Video for Prec, stats for Insertion/Deletion #########")
@@ -762,6 +764,7 @@ for sigma_t in sigma_t_values:
         saliency_video_i = rise_spatial_temporal_explain(nr_instance, vottignasco_test_image, vottignasco_test_OHE, models, channel_prec,
                                                    N, generate_masks_gaussian3D, seed, additive_gaussianNoise_onechannel, sigma_t=sigma_t, sigma_x=sigma_x, sigma_y=sigma_y)
 
+        all_saliency_video.append(saliency_video_i)   
         #Insertion
         initial_blurred_instance = np.zeros((T, H, W, C))
         all_important_pixels = get_flatten_saliency_video_ordered_by_importance(saliency_video_i)
@@ -772,13 +775,15 @@ for sigma_t in sigma_t_values:
 
         # Deletion
         errors_deletion,auc_deletion   = deletion(models, original_instance, x3_instance, all_important_pixels, original_prediction)
-
+          
         # Aggiungi la coppia [errors_insertion, auc_insertion] alla lista
         all_insertion_stats.append([errors_insertion, auc_insertion])
         # Coppia per la Deletion
         all_deletion_stats.append([errors_deletion, auc_deletion])
         print(f"###################### End Instance #{nr_instance} ######################")
 
+      saliency_videos.append(all_saliency_video)
+        
       only_errors_insertion = [errors for errors,_ in all_insertion_stats]
       auc_insertion,mean_errors_insertion = calculate_auc_and_mean_errors(only_errors_insertion)
       stats_mean_insertion.append([auc_insertion,mean_errors_insertion, param_combination])
@@ -795,5 +800,7 @@ import pandas as pd
 df_stats_mean_insertion = pd.DataFrame(stats_mean_insertion, columns=['AUC', 'Mean Insertion Errors for each Pixel'])
 df_stats_mean_deletion  = pd.DataFrame(stats_mean_deletion,  columns=['AUC', 'Mean Deletion Errors for each Pixel'])
 
+# Salva l'array in un file
+np.save(os.path.join(work_path, f"Water_Resources/rise-video/XAI/spatial_temporal/results/additive_gaussian_single_noise/saliency_videos.npy", saliency_videos)
 df_stats_mean_insertion.to_csv(os.path.join(work_path, f"Water_Resources/rise-video/XAI/spatial_temporal/results/additive_gaussian_single_noise/all_stats_mean_insertion.csv"), index=False)
 df_stats_mean_deletion.to_csv(os.path.join(work_path, f"Water_Resources/rise-video/XAI/spatial_temporal/results/additive_gaussian_single_noise/all_stats_mean_deletion.csv"),   index=False)
