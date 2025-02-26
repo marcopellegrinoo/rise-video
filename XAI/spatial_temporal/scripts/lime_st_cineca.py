@@ -1171,9 +1171,6 @@ models      = vott_lstm_models_loaded          # Black-boxes in ensamble da spie
 
 N = 5000
 
-stats_mean_insertion = []
-stats_mean_deletion  = []
-
 kernel_width = 20
 alpha = 10.0
 
@@ -1184,8 +1181,8 @@ segments = np.array([[1, 1, 1, 1, 1, 2, 2, 3],
        [5, 5, 4, 4, 6, 7, 7, 8],
        [5, 5, 6, 6, 6, 7, 7, 8]])
 
-stats_mean_insertion = []
-stats_mean_deletion  = []
+stats_insertion = []
+stats_deletion  = []
 
 all_insertion_stats = []
 all_deletion_stats  = []
