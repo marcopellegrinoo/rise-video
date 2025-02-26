@@ -1190,7 +1190,7 @@ stats_mean_deletion  = []
 all_insertion_stats = []
 all_deletion_stats  = []
 for nr_instance, _ in enumerate(vottignasco_test_image):
-  print(f"############### LIME-Spatio-Temporal with N:{N}, kernel_width:{kernel_width}, alpha:{alpha} ###############")
+  print(f"############### LIME-Spatio-Temporal with N:{N}, kernel_width:{kernel_width}, alpha:{alpha}  on Instance #{nr_instance} ###############")
 
   # Temporal Superpixel
   # Converti le date in pandas datetime
@@ -1242,20 +1242,21 @@ for nr_instance, _ in enumerate(vottignasco_test_image):
   all_insertion_stats.append([errors_insertion, auc_insertion])
   # Coppia per la Deletion
   all_deletion_stats.append([errors_deletion, auc_deletion])
-  print("############### END INSTANCE ###############################################################################")
+  print("############### END INSTANCE #{nr_instance} ###############################################################################")
+
 
 only_errors_insertion = [errors for errors,_ in all_insertion_stats]
-auc_insertion,mean_errors_insertion = calculate_auc_and_mean_errors(only_errors_insertion)
-stats_mean_insertion.append([auc_insertion,mean_errors_insertion])
+#auc_insertion,mean_errors_insertion = calculate_auc_and_mean_errors(only_errors_insertion)
+stats_insertion.append(only_errors_insertion)
 
 only_errors_deletion =  [errors for errors,_ in all_deletion_stats]
-auc_deletion,mean_errors_deletion = calculate_auc_and_mean_errors(only_errors_deletion)
-stats_mean_deletion.append([auc_deletion,mean_errors_deletion])
+#auc_deletion,mean_errors_deletion = calculate_auc_and_mean_errors(only_errors_deletion)
+stats_deletion.append(only_errors_deletion)
 
 import pandas as pd
 
-df_stats_mean_insertion = pd.DataFrame(stats_mean_insertion, columns=['AUC', 'Mean Insertion Errors for each SuperPixel'])
-df_stats_mean_deletion  = pd.DataFrame(stats_mean_deletion,  columns=['AUC', 'Mean Deletion Errors for each SuperPixel'])
+df_stats_mean_insertion = pd.DataFrame(stats_insertion, columns=['Insertion Errors for each SuperPixel'])
+df_stats_mean_deletion  = pd.DataFrame(stats_deletion,  columns=['Deletion Errors for each SuperPixel'])
 
-df_stats_mean_insertion.to_csv(os.path.join(work_path, f"Water_Resources/rise-video/XAI/spatial_temporal/results/additive_uniform_noise/lime_all_stats_mean_insertion.csv"), index=False)
-df_stats_mean_deletion.to_csv(os.path.join(work_path, f"Water_Resources/rise-video/XAI/spatial_temporal/results/additive_uniform_noise/lime_all_stats_mean_deletion.csv"),   index=False)
+df_stats_mean_insertion.to_csv(os.path.join(work_path, f"Water_Resources/rise-video/XAI/spatial_temporal/results/additive_uniform_noise/lime_all_stats_insertion.csv"), index=False)
+df_stats_mean_deletion.to_csv(os.path.join(work_path, f"Water_Resources/rise-video/XAI/spatial_temporal/results/additive_uniform_noise/lime_all_stats_deletion.csv"),   index=False)
