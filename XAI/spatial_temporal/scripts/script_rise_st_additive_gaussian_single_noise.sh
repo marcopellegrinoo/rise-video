@@ -13,10 +13,6 @@
 
 export PYTHONUNBUFFERED=TRUE
 
-module purge
-
-export WANDB_MODE = "offline"
-
 source $WORK/Water_Resources/env/bin/activate
 cd $WORK/Water_Resources/rise-video/XAI/temporal/scripts
 
