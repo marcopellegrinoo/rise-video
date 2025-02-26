@@ -12,9 +12,6 @@
 #SBATCH --qos=normal                    # quality of service (optional)
 
 export PYTHONUNBUFFERED=TRUE
-module purge 
-
-module load cuda@11.8.0
 
 source $WORK/Water_Resources/env/bin/activate
 cd $WORK/Water_Resources/rise-video/XAI/spatial_temporal/scripts
