@@ -1,1 +1,0 @@
-Store dei risultati per rise-spatial

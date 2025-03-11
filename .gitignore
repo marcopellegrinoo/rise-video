@@ -1,0 +1,3 @@
+# Ignora cartelle di log
+logs/
+**/logs/
