@@ -1049,7 +1049,7 @@ for seed in seed_values:
    print(f"################################ END all dataset for {param_combination} ################################ ")
    # Salva risultati una volta per ogni setup
    #path_to_save_results = os.path.join(work_path, f"Water_Resources/rise-video/XAI/spatial_temporal/results/lime_shap_multiplicative_norm_zero/corrected_ins_del_lime_shap_st_results_setup_ns_{n_s}_comp_{comp}.pkl") 
-   path_to_save_results = f"{RESULT_DIR}/lime_shap_st_results_setup_ns_{n_s}_comp_{comp}.pkl"
+   path_to_save_results = f"{RESULT_DIR}/lime_shap_st_results_setup_ns_{n_s}_comp_{comp}_seed_{seed}.pkl"
 
    with open(path_to_save_results, 'wb') as f:
     pickle.dump(results, f)

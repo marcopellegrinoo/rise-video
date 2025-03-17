@@ -1,3 +1,5 @@
 # Ignora cartelle di log
 logs/
 **/logs/
+**/common
+**/notebooks
