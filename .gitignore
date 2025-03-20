@@ -1,5 +1,20 @@
 # Ignora cartelle di log
 logs/
 **/logs/
+# Common
 **/common/
+**/common/**/
+# Notebooks 
 **/notebooks/
+**/notebooks/**/
+# Data
+**/data/
+**/data/**/
+# Black-Boxes
+**/trained_models/**/
+# paper_results
+**/paper_results/
+**/paper_results/**/
+# .sh
+**/shell/
+**/shell/**/
