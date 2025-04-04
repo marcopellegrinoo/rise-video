@@ -4,6 +4,9 @@ Spatio-temporal deep learning models are powerful tools for tasks like environme
 
 These extensions enable a detailed understanding of model behavior across space and time. We evaluate the methods on a real-world task: **groundwater level prediction**. Our results show that each technique offers unique insights, highlighting the value of combining different explanation strategies in dynamic environmental contexts.
 
+![algorithm_pipelines](https://github.com/user-attachments/assets/35a8897d-c76f-4d70-b999-e7d8bbabbfa6)
+
+
 ## Repository Contents
 
 - `spatial/`  
